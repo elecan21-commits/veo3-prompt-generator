@@ -64,14 +64,93 @@
             margin-bottom: 30px;
         }
 
-        .coming-soon {
-            font-size: 1.1em;
-            color: #667eea;
+        .form-section {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
             font-weight: 600;
-            padding: 20px;
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            color: #2d3748;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .generate-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .result-section {
+            background: linear-gradient(135deg, #84fab0, #8fd3f4);
+            padding: 25px;
             border-radius: 15px;
-            border: 2px dashed #667eea;
+            margin-top: 25px;
+            display: none;
+        }
+
+        .result-text {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            word-wrap: break-word;
+        }
+
+        .copy-btn {
+            background: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 15px;
+            font-weight: 600;
         }
     </style>
 </head>
@@ -81,10 +160,70 @@
             <h1>🎬 VEO3 프롬프트 마스터</h1>
             <p>AI 동영상 생성을 위한 전문적이고 창의적인 프롬프트를 만들어보세요</p>
         </div>
-        <div class="coming-soon">
-            ✨ 놀라운 기능들이 곧 추가됩니다! 
-            <br>프롬프트 템플릿, 스타일 가이드, 실시간 미리보기 등...
+        
+        <div class="form-section">
+            <h2 style="margin-bottom: 20px; color: #2d3748;">프롬프트 생성하기</h2>
+            
+            <div class="form-group">
+                <label class="form-label">주요 대상 (Subject)</label>
+                <input type="text" class="form-input" id="subject" placeholder="예: 젊은 여성, 용, 로봇 등...">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">행동 & 상황 (Action)</label>
+                <textarea class="form-textarea" id="action" placeholder="예: 숲을 걸어가며 신비로운 빛을 따라가고 있다"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">배경 & 환경 (Setting)</label>
+                <textarea class="form-textarea" id="setting" placeholder="예: 일몰 무렵, 신비로운 고대 숲 속의 빛나는 호수 옆에서"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">스타일 (Style)</label>
+                <input type="text" class="form-input" id="style" placeholder="예: cinematic, photorealistic, 4K">
+            </div>
+            
+            <button class="generate-btn" onclick="generatePrompt()">
+                ✨ 프롬프트 생성하기
+            </button>
+            
+            <div class="result-section" id="resultSection">
+                <button class="copy-btn" onclick="copyToClipboard()">📋 복사하기</button>
+                <div class="result-text" id="resultText"></div>
+            </div>
         </div>
     </div>
+
+    <script>
+        function generatePrompt() {
+            const subject = document.getElementById('subject').value || 'a mysterious figure';
+            const action = document.getElementById('action').value || 'standing in contemplation';
+            const setting = document.getElementById('setting').value || 'in a dramatic landscape';
+            const style = document.getElementById('style').value || 'cinematic, photorealistic, 4K';
+            
+            const prompt = `${subject} ${action} ${setting}, ${style}`;
+            
+            document.getElementById('resultText').textContent = prompt;
+            document.getElementById('resultSection').style.display = 'block';
+        }
+        
+        function copyToClipboard() {
+            const resultText = document.getElementById('resultText').textContent;
+            navigator.clipboard.writeText(resultText).then(function() {
+                const copyBtn = document.querySelector('.copy-btn');
+                const originalText = copyBtn.textContent;
+                copyBtn.textContent = '✅ 복사완료!';
+                copyBtn.style.background = '#28a745';
+                copyBtn.style.color = 'white';
+                
+                setTimeout(function() {
+                    copyBtn.textContent = originalText;
+                    copyBtn.style.background = 'white';
+                    copyBtn.style.color = 'black';
+                }, 2000);
+            });
+        }
+    </script>
 </body>
 </html>
